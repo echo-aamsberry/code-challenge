@@ -1,0 +1,40 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - manifests/api.yml
+  - manifests/worker-commandhandlers.yml
+  - manifests/worker-clutchtranslator.yml
+  - manifests/worker-matcher.yml
+  - db/mssql.yml
+patchesJson6902:
+  - path: kustomize-patches/patch-api.yaml
+    target:
+      group: apps
+      kind: Deployment
+      name: arbitr-api
+      version: v1
+  - path: kustomize-patches/patch-worker-commandhandlers.yaml
+    target:
+      group: apps
+      kind: Deployment
+      name: arbitr-worker-commandhandlers
+      version: v1
+  - path: kustomize-patches/patch-worker-clutchtranslator.yaml
+    target:
+      group: apps
+      kind: Deployment
+      name: arbitr-worker-clutchtranslator
+      version: v1
+configMapGenerator:
+  - name: arbitr-config
+    literals:
+    - RabbitMq__Host=rabbitmq-arbitr
+secretGenerator:
+  - name: arbitr-secret
+    literals:
+    - RabbitMq__Username=guest
+    - RabbitMq__Password=guest
+    - ConnectionStrings__Arbitr="Server=arbitr-sql;Initial Catalog=Arbitr;User=sa;Password=Echo1234"
+  - name: arbitr-sql
+    literals:
+    - SA_PASSWORD=Echo1234

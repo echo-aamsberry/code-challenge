@@ -1,0 +1,61 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: arbitr-worker-clutchtranslator
+  labels:
+    team: elite
+spec:
+  selector:
+    matchLabels:
+      run: arbitr-worker-clutchtranslator
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: arbitr-worker-clutchtranslator
+        echo.com/servicetype: worker
+        team: elite
+    spec:
+      containers:
+      - name: arbitr-worker-clutchtranslator-container
+        image: skaffold-dev/arbitr.worker.clutchtranslator:latest
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "10m"
+          limits:
+            memory: "512Mi"
+            cpu: "1000m"
+        envFrom:
+        - configMapRef:
+            name: arbitr-config
+        - secretRef:
+            name: arbitr-secret
+        ports:
+        - containerPort: 80
+        env:
+        - name: ASPNETCORE_URLS
+          value: http://+:80
+        livenessProbe:
+          httpGet:
+            path: /_health
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          failureThreshold: 4
+          timeoutSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /_health
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          failureThreshold: 4
+          timeoutSeconds: 3
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
+      hostNetwork: false
+---

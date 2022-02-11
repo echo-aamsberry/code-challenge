@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MassTransit" Version="7.2.1" />
+    <PackageReference Include="MassTransit.AspNetCore" Version="7.2.1" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="7.2.1" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Arbitr.CommandHandlers\Arbitr.CommandHandlers.csproj" />
+    <ProjectReference Include="..\Arbitr.Core\Arbitr.Core.csproj" />
+    <ProjectReference Include="..\Arbitr.EventHandlers\Arbitr.EventHandlers.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MassTransit" Version="7.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Arbitr.ClutchEvents\Arbitr.ClutchEvents.csproj" />
+    <ProjectReference Include="..\Arbitr.Commands\Arbitr.Commands.csproj" />
+    <ProjectReference Include="..\Arbitr.Data\Arbitr.Data.csproj" />
+  </ItemGroup>
+
+</Project>

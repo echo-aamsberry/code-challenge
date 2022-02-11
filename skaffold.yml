@@ -1,0 +1,54 @@
+apiVersion: skaffold/v2beta25
+kind: Config
+metadata:
+  name: Arbitr
+build:
+  local: {}
+  tagPolicy:
+    sha256: {}
+  artifacts:
+  - image: skaffold-dev/arbitr.api
+    docker:
+      dockerfile: src/Arbitr.Api/Dockerfile
+      target: build
+  - image: skaffold-dev/arbitr.worker.commandhandlers
+    docker:
+      dockerfile: src/Arbitr.Worker.CommandHandlers/Dockerfile
+      target: build
+  - image: skaffold-dev/arbitr.worker.clutchtranslator
+    docker:
+      dockerfile: src/Arbitr.Worker.ClutchTranslator/Dockerfile
+      target: build
+  - image: skaffold-dev/arbitr.worker.matcher
+    docker:
+      dockerfile: src/Arbitr.Worker.Matcher/Dockerfile
+      target: final
+  - image: skaffold-dev/arbitr.db
+    context: db
+deploy:
+  kustomize:
+    paths:
+    - .
+  kubeContext: docker-desktop
+  helm:
+    releases:
+    - name: rabbitmq-arbitr
+      remoteChart: rabbitmq
+      repo: https://charts.bitnami.com/bitnami
+      wait: true
+      setValues:
+        service:
+          type: LoadBalancer
+        auth:
+          username: guest
+          password: guest
+        persistence:
+          enabled: false
+    - name: nginx-ingress
+      remoteChart: nginx-ingress-controller
+      repo: https://charts.bitnami.com/bitnami
+      wait: true
+      setValues:
+        service.enableHttps: false
+        service.type: NodePort
+        service.nodePorts.http: 30600

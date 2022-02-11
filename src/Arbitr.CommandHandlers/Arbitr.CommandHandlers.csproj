@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MassTransit" Version="7.2.1" />
+    <PackageReference Include="Serilog" Version="2.10.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Arbitr.Commands\Arbitr.Commands.csproj" />
+    <ProjectReference Include="..\Arbitr.Core\Arbitr.Core.csproj" />
+    <ProjectReference Include="..\Arbitr.Data\Arbitr.Data.csproj" />
+  </ItemGroup>
+
+</Project>

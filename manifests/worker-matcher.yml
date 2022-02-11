@@ -1,0 +1,33 @@
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: arbitr-worker-matcher
+  labels:
+    team: elite
+spec:
+  concurrencyPolicy: Forbid
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: arbitr-worker-matcher-container
+            image: skaffold-dev/arbitr.worker.matcher:latest
+            resources:
+              requests:
+                memory: "512Mi"
+                cpu: "10m"
+              limits:
+                memory: "512Mi"
+                cpu: "1000m"
+            envFrom:
+            - secretRef:
+                name: arbitr-secret
+          restartPolicy: Never
+          dnsConfig:
+            options:
+            - name: ndots
+              value: "1"
+---
